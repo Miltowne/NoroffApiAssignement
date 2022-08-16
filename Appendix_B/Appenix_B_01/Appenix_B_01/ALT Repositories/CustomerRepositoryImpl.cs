@@ -75,7 +75,7 @@ namespace Appenix_B_01.ALT_Repositories
         public IEnumerable<Customer> GetAllWhitLimit(int offset, int limit)
         {
             List<Customer> tempList = new List<Customer>();
-            string sql = $" SELECT CustomerId, FirstName, LastName, Country, PostalCode FROM Customer ORDER BY CustomerId OFFSET {offset}  ROWS FETCH NEXT {limit}  ROWS ONLY";
+            string sql = $" SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer ORDER BY CustomerId OFFSET {offset}  ROWS FETCH NEXT {limit}  ROWS ONLY";
             try
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString()))
@@ -92,18 +92,11 @@ namespace Appenix_B_01.ALT_Repositories
                                 Customer temp = new Customer();
                                 temp.CustomerId = reader.GetInt32(0);
                                 temp.FirstName = reader.GetString(1);
-
                                 temp.LastName = reader.GetString(2);
-                                //temp.Company = reader.GetString(2);
-                                //temp.Address = reader.GetString(3) == null ? "null" : reader.GetString(3);
-                                //temp.City = reader.GetString(4) == null ? "null" : reader.GetString(4);
-                                ////temp.State = reader.GetString(4);
-                                temp.Country = reader.GetString(3);
-                                temp.PostalCode = reader.GetString(4) == null ? "null" : reader.GetString(4);
-                                //temp.Phone = reader.GetString(7) == null ? "null" : reader.GetString(7);
-                                ////temp.Fax = reader.GetString(7)
-                                ////temp.Email = reader.GetString(10);
-
+                                temp.Country = reader.IsDBNull(3) ? String.Empty : reader.GetString(3); // If value is null, set it to string (easier for foreachloop later on if value is not null)
+                                temp.PostalCode = reader.IsDBNull(4) ? String.Empty : reader.GetString(4);
+                                temp.Phone = reader.IsDBNull(5) ? String.Empty : reader.GetString(5);
+                                temp.Email = reader.IsDBNull(6) ? String.Empty : reader.GetString(6);
                                 tempList.Add(temp);
                             }
                         }

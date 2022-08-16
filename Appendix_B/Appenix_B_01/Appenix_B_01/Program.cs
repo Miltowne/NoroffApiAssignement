@@ -18,7 +18,7 @@ class Program
 
     static void TestGetAllWhitLimit(ICustomerRepository repository)
     {
-        PrintCustomers(repository.GetAllWhitLimit(50, 9));
+        PrintCustomers(repository.GetAllWhitLimit(40, 20));
     }
 
     static void TestSearchByString(ICustomerRepository repository)
