@@ -1,6 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Appenix_B_01.ALT_Repositories;
 using Appenix_B_01.Models;
 using Appenix_B_01.Repositories;
+using ICustomerRepository = Appenix_B_01.ALT_Repositories.ICustomerRepository;
 
 class Program
 {
@@ -9,19 +11,28 @@ class Program
         Console.WriteLine("Hello, World!");
         // POCO
 
-         ICustomerRepository repository = new CustomerRepository();
+         ICustomerRepository repository = new CustomerRepositoryImpl();
         // CRUD
-        TestInsert(repository);
+        TestGetAllWhitLimit(repository);
     }
 
+    static void TestGetAllWhitLimit(ICustomerRepository repository)
+    {
+        PrintCustomers(repository.GetAllWhitLimit(50, 9));
+    }
+
+    static void TestSearchByString(ICustomerRepository repository)
+    {
+        PrintCustomer(repository.Search("barbaro"));
+    }
 
     static void TestSelectAll(ICustomerRepository repository)
     {
-        PrintCustomers(repository.GetAllCustomers());
+        PrintCustomers(repository.GetAll());
     }
     static void TestSelect(ICustomerRepository repository)
     {
-        PrintCustomer(repository.GetCustomer(1));
+        PrintCustomer(repository.GetById(1));
     }
 
     static void TestInsert(ICustomerRepository repository)
@@ -42,10 +53,10 @@ class Program
             State = "aesfg",
             SupportRepId = 1
         };
-        if (repository.AddNewCustomer(test))
+        if (repository.Add(test))
         {
             Console.WriteLine("Worked!");
-            PrintCustomer(repository.GetCustomer(63));
+            PrintCustomer(repository.GetById(63));
         }
         else
         {
@@ -55,7 +66,7 @@ class Program
 
     static void TestUpdate(ICustomerRepository repository)
     {
-        PrintCustomer(repository.GetCustomer(1));
+        PrintCustomer(repository.GetById(1));
     }
     static void PrintCustomers(IEnumerable<Customer> customers)
     {
@@ -67,7 +78,7 @@ class Program
 
     static void PrintCustomer(Customer customer)
     {
-        Console.WriteLine($"--- {customer.CustomerId} {customer.LastName} {customer.FirstName} ---");
+        Console.WriteLine($"--- {customer.CustomerId} {customer.LastName} {customer.FirstName} {customer.Country}  {customer.Phone} {customer.Email} ---");
     }
 }
 

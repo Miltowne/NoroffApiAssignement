@@ -454,19 +454,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\TJonas\\.nuget\\packages\\": {}
+    "C:\\Users\\SAjani\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\TJonas\\Desktop\\Project\\Backend Project\\SQLQuery\\assagnement6\\Appendix_B\\Appenix_B_01\\Appenix_B_01\\Appenix_B_01.csproj",
+      "projectUniqueName": "C:\\Users\\SAjani\\Desktop\\project\\assigment6\\assagnement6\\Appendix_B\\Appenix_B_01\\Appenix_B_01\\Appenix_B_01.csproj",
       "projectName": "Appenix_B_01",
-      "projectPath": "C:\\Users\\TJonas\\Desktop\\Project\\Backend Project\\SQLQuery\\assagnement6\\Appendix_B\\Appenix_B_01\\Appenix_B_01\\Appenix_B_01.csproj",
-      "packagesPath": "C:\\Users\\TJonas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\TJonas\\Desktop\\Project\\Backend Project\\SQLQuery\\assagnement6\\Appendix_B\\Appenix_B_01\\Appenix_B_01\\obj\\",
+      "projectPath": "C:\\Users\\SAjani\\Desktop\\project\\assigment6\\assagnement6\\Appendix_B\\Appenix_B_01\\Appenix_B_01\\Appenix_B_01.csproj",
+      "packagesPath": "C:\\Users\\SAjani\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\SAjani\\Desktop\\project\\assigment6\\assagnement6\\Appendix_B\\Appenix_B_01\\Appenix_B_01\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\TJonas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\SAjani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
