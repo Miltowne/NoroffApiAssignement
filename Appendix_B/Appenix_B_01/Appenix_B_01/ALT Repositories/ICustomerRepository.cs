@@ -12,6 +12,8 @@ namespace Appenix_B_01.ALT_Repositories
         public Customer Search(string searchString);
 
         public IEnumerable<Customer> GetAllWhitLimit(int offset, int limit);
+
+
                
     }
 }
