@@ -1,6 +1,39 @@
-# Assagnement6
+# Project Title
+Assignment6 
 
+# Descripton 
+this is a school-assignment where we work whit Chinook database we create SQL querrys and SQL injection on a console application.
 
+# Usage
+```
+C#
+   public bool Add(Customer entity)
+        {
+            bool success = false;
+            string sql = "INSERT INTO Customer(FirstName, LastName, Address, Email) VALUES(@FirstName, @LastName, @Address, @Email)";
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionStringHelper.GetConnectionString()))
+                {
+                    Console.WriteLine("Connecting...");
+                    conn.Open();
+                    Console.WriteLine("Connected");
+                    // Make A Command
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        // Reader
+                        // Handle Result
+                        //cmd.Parameters.AddWithValue("@CustomerId", entity.CustomerId);
+                        cmd.Parameters.AddWithValue("@FirstName", entity.FirstName);
+                        cmd.Parameters.AddWithValue("@LastName", entity.LastName);
+                        cmd.Parameters.AddWithValue("@Address", entity.Address);
+                        cmd.Parameters.AddWithValue("@Email", entity.Email);
+                        success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
+                }
+            }
+
+```
 
 ## Getting started
 
