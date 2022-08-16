@@ -1,1 +1,0 @@
-select * from Customer where CustomerId = 5;
