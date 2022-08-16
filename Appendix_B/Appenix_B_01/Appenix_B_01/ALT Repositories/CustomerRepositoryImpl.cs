@@ -13,8 +13,39 @@ namespace Appenix_B_01.ALT_Repositories
     {
         public bool Add(Customer entity)
         {
-            throw new NotImplementedException();
-        }
+            bool success = false;
+            string sql = "INSERT INTO Customer(FirstName, LastName, Address, Email) VALUES(@FirstName, @LastName, @Address, @Email)";
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionStringHelper.GetConnectionString()))
+                {
+                    Console.WriteLine("Connecting...");
+                    conn.Open();
+                    Console.WriteLine("Connected");
+                    // Make A Command
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        // Reader
+                        // Handle Result
+                        //cmd.Parameters.AddWithValue("@CustomerId", entity.CustomerId);
+                        cmd.Parameters.AddWithValue("@FirstName", entity.FirstName);
+                        cmd.Parameters.AddWithValue("@LastName", entity.LastName);
+                        cmd.Parameters.AddWithValue("@Address", entity.Address);
+                        cmd.Parameters.AddWithValue("@Email", entity.Email);
+                        success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine("sql exception " + e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return success;
+    }
 
         public bool Delete(Customer entity)
         {

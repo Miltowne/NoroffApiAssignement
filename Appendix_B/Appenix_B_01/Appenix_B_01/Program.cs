@@ -13,8 +13,10 @@ class Program
 
          ICustomerRepository repository = new CustomerRepositoryImpl();
         // CRUD
-        TestGetAllWhitLimit(repository);
+        TestInsert(repository);
     }
+
+
 
     static void TestGetAllWhitLimit(ICustomerRepository repository)
     {
@@ -37,11 +39,11 @@ class Program
 
     static void TestInsert(ICustomerRepository repository)
     {
-        Customer test = new Customer()
+     var  TestAdd = new Customer()
         {
-            CustomerId = 62,
-            FirstName = "Pelle",
-            LastName = "Larsson",
+            CustomerId = 64,
+            FirstName = "Hans",
+            LastName = "Apa",
             Company = "swederkgn",
             Email = "adam@adam.se",
             Address = "LarssonStreet",
@@ -53,10 +55,10 @@ class Program
             State = "aesfg",
             SupportRepId = 1
         };
-        if (repository.Add(test))
+        if (repository.Add(TestAdd))
         {
             Console.WriteLine("Worked!");
-            PrintCustomer(repository.GetById(63));
+            PrintCustomer(repository.GetById(64));
         }
         else
         {
