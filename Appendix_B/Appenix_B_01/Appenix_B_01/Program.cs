@@ -11,12 +11,32 @@ class Program
         Console.WriteLine("Hello, World!");
         // POCO
 
-         ICustomerRepository repository = new CustomerRepositoryImpl();
+        ICustomerRepository repository = new CustomerRepositoryImpl();
         // CRUD
-        TestInsert(repository);
+        TestCustomerCountries(repository);
+
+        TestCustomerOrderedTotal(repository);
+
+        TestGenreCount(repository);
     }
+    static void TestCustomerCountries(ICustomerRepository repository)
+    {
+        PrintNumOfCountryCustomers(repository.GetNumberOfCountries());
+    }
+    static void PrintNumOfCountryCustomers(IEnumerable<NumberOfCountriesCustomer> customerCountries)
+    {
+        foreach (var customerCountry in customerCountries)
+        {
+            Console.WriteLine($"Number Of Customer: {customerCountry.NumberOfCountries} In: {customerCountry.Country}");
 
-
+        }
+    }
+    static void TestGenreCount(ICustomerRepository repository)
+    {
+        
+        var customer = repository.GetById(56);
+        PrintGenreCountCustomer(repository.MostPopularGenre(56), customer);
+    }
 
     static void TestGetAllWhitLimit(ICustomerRepository repository)
     {
@@ -37,23 +57,23 @@ class Program
         PrintCustomer(repository.GetById(1));
     }
 
+    static void TestCustomerOrderedTotal(ICustomerRepository repository)
+    {
+        PrintCustomers(repository.HighestSpenders());
+    }
+
     static void TestInsert(ICustomerRepository repository)
     {
-     var  TestAdd = new Customer()
+        var TestAdd = new Customer("Pelle", "Jansson", "Pelle@hotmail.com")
         {
-            CustomerId = 64,
-            FirstName = "Hans",
-            LastName = "Apa",
             Company = "swederkgn",
-            Email = "adam@adam.se",
             Address = "LarssonStreet",
             City = "Norrköping",
             Country = "Sweden",
             Fax = "",
             Phone = "2435789",
             PostalCode = "3456",
-            State = "aesfg",
-            SupportRepId = 1
+            State = "aesfg"
         };
         if (repository.Add(TestAdd))
         {
@@ -68,7 +88,27 @@ class Program
 
     static void TestUpdate(ICustomerRepository repository)
     {
-        PrintCustomer(repository.GetById(1));
+        var testAdd = new Customer("Pelle", "Jansson", "Pelle@hotmail.com")
+        {
+            CustomerId = 1,
+            Company = "swederkgn",
+            Address = "LarssonStreet",
+            City = "Norrköping",
+            Country = "Sweden",
+            Fax = "",
+            Phone = "2435789",
+            PostalCode = "3456",
+            State = "aesfg",
+        };
+        if (repository.Edit(testAdd))
+        {
+            Console.WriteLine("Success! Updated an customer!");
+            PrintCustomer(repository.GetById(1));
+        }
+        else
+        {
+            Console.WriteLine("Not a good day.. a customer couldn't update customer");
+        }
     }
     static void PrintCustomers(IEnumerable<Customer> customers)
     {
@@ -80,7 +120,21 @@ class Program
 
     static void PrintCustomer(Customer customer)
     {
-        Console.WriteLine($"--- {customer.CustomerId} {customer.LastName} {customer.FirstName} {customer.Country}  {customer.Phone} {customer.Email} ---");
+        if(customer.Invoice.Total > 0)
+        {
+            Console.WriteLine($"---Id: {customer.CustomerId} LastName: {customer.LastName} FirstName: {customer.FirstName} Country: {customer.Country} Phone number: {customer.Phone} email: {customer.Email} total: {customer.Invoice.Total} ---");
+
+        }
+        else Console.WriteLine($"---Id: {customer.CustomerId} LastName: {customer.LastName} FirstName: {customer.FirstName} Country: {customer.Country} Phone number: {customer.Phone} email: {customer.Email} ---");
+    }
+
+    static void PrintGenreCountCustomer(IEnumerable<GenreCountCustomer> genreCount, Customer customer)
+    {
+        Console.WriteLine($"Customer: {customer.FirstName} {customer.LastName} \n Have: ");
+        foreach (var _genreCount in genreCount)
+        {
+            Console.WriteLine($"Count: {_genreCount.GenreCount} Of genre: {_genreCount.GenreName} \n");
+        }
     }
 }
 

@@ -3,6 +3,7 @@ using Appenix_B_01.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace Appenix_B_01.ALT_Repositories
                 Console.WriteLine(e.Message);
             }
             return success;
-    }
+        }
 
         public bool Delete(Customer entity)
         {
@@ -54,7 +55,40 @@ namespace Appenix_B_01.ALT_Repositories
 
         public bool Edit(Customer entity)
         {
-            throw new NotImplementedException();
+            bool success = false;
+            string sql = $"UPDATE Customer SET FirstName = @FirstName, LastName = @LastName, Country = @Country, PostalCode = @PostalCode, Phone = @Phone WHERE CustomerId = {entity.CustomerId}";
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionStringHelper.GetConnectionString()))
+                {
+                    // Open Connection
+                    Console.WriteLine("Connecting...");
+                    conn.Open();
+                    Console.WriteLine("Connected");
+                    // Make A Command
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        // Handle Result
+                        cmd.Parameters.AddWithValue("@FirstName", entity.FirstName);
+                        cmd.Parameters.AddWithValue("@LastName", entity.LastName);
+                        cmd.Parameters.AddWithValue("@Country", entity.Country);
+                        cmd.Parameters.AddWithValue("@PostalCode", entity.PostalCode);
+                        cmd.Parameters.AddWithValue("@Address", entity.Address);
+                        cmd.Parameters.AddWithValue("@Email", entity.Email);
+                        cmd.Parameters.AddWithValue("@Phone", entity.Phone);
+                        success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine("sql exception " + e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return success;
         }
 
         public IEnumerable<Customer> GetAll()
@@ -86,9 +120,7 @@ namespace Appenix_B_01.ALT_Repositories
                             }
                         }
                     }
-
                 }
-
             }
             catch (SqlException sqlex)
             {
@@ -102,7 +134,7 @@ namespace Appenix_B_01.ALT_Repositories
             return tempList;
         }
 
-        
+
         public IEnumerable<Customer> GetAllWhitLimit(int offset, int limit)
         {
             List<Customer> tempList = new List<Customer>();
@@ -134,7 +166,6 @@ namespace Appenix_B_01.ALT_Repositories
                     }
 
                 }
-
             }
             catch (SqlException sqlex)
             {
@@ -147,7 +178,6 @@ namespace Appenix_B_01.ALT_Repositories
             }
             return tempList;
         }
-
         public Customer GetById(int id)
         {
             Customer temp = new Customer();
@@ -172,7 +202,7 @@ namespace Appenix_B_01.ALT_Repositories
                                 temp.PostalCode = reader.GetString(4);
                                 temp.Phone = reader.GetString(5);
                                 temp.Email = reader.GetString(6);
-                               
+
                             }
                         }
                     }
@@ -190,6 +220,140 @@ namespace Appenix_B_01.ALT_Repositories
                 Console.WriteLine(ex.Message);
             }
             return temp;
+        }
+
+        public IEnumerable<NumberOfCountriesCustomer> GetNumberOfCountries()
+        {
+            List<NumberOfCountriesCustomer> tempList = new List<NumberOfCountriesCustomer>();
+            string sql = $"SELECT Country, COUNT(*) NumberOfCountries FROM Customer GROUP BY Country ORDER BY NumberOfCountries DESC";
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString()))
+                {
+                    Console.WriteLine("Connecting...");
+                    connection.Open();
+                    Console.WriteLine("Connected");
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                NumberOfCountriesCustomer temp = new NumberOfCountriesCustomer();
+                                // If value is null, set it to string (easier for foreachloop later on if value is not null)
+                                temp.Country = reader.IsDBNull(0) ? "No Country" : reader.GetString(0);
+                                temp.NumberOfCountries = reader.IsDBNull(1) ? 0 : reader.GetInt32(1);
+                                tempList.Add(temp);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException sqlex)
+            {
+
+                Console.WriteLine("sql exception" + sqlex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception generic" + ex.Message);
+            }
+            return tempList;
+        }
+
+        public IEnumerable<Customer> HighestSpenders()
+        {
+            List<Customer> tempList = new List<Customer>();
+            string sql = $"SELECT Customer.FirstName, Customer.LastName, Invoice.Total FROM Customer INNER JOIN Invoice ON Customer.CustomerId = Invoice.CustomerId ORDER BY Invoice.Total DESC";
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString()))
+                {
+                    Console.WriteLine("Connecting...");
+                    connection.Open();
+                    Console.WriteLine("Connected");
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Customer temp = new Customer();
+                                // If value is null, set it to string (easier for foreachloop later on if value is not null)
+                                //temp.CustomerId = reader.GetInt32(0);
+                                temp.FirstName = reader.GetString(0);
+                                temp.LastName = reader.GetString(1);
+                                //SqlDecimal s = new SqlDecimal(reader.GetDecimal(2));
+                                temp.Invoice.Total = reader.GetDecimal(2);
+                                tempList.Add(temp);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException sqlex)
+            {
+
+                Console.WriteLine("sql exception" + sqlex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception generic" + ex.Message);
+            }
+            return tempList;
+        }
+
+        public IEnumerable<GenreCountCustomer> MostPopularGenre(int id)
+        {
+            List<GenreCountCustomer> tempList = new List<GenreCountCustomer>();
+
+            string sql = "with GenreCountTable as (" +
+                "SELECT Genre.Name, COUNT(Genre.GenreId) AS genreCount " +
+                "FROM Genre " +
+                "JOIN Track " +
+                "ON Genre.GenreId = Track.GenreId " +
+                "JOIN InvoiceLine " +
+                "ON InvoiceLine.TrackId = Track.TrackId " + 
+                "JOIN Invoice " +
+                "ON Invoice.InvoiceId = InvoiceLine.InvoiceId " +
+                "JOIN Customer " +
+                $"ON Invoice.CustomerId = Customer.CustomerId WHERE Customer.CustomerId = {id} " +
+                "GROUP BY Genre.Name) " +
+                "(SELECT GenreCountTable.Name, GenreCountTable.genreCount " +
+                "FROM GenreCountTable JOIN(SELECT MAX(genreCount) as maxCount FROM GenreCountTable) table2 " +
+                "ON GenreCountTable.genreCount = table2.maxCount)";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString()))
+                {
+                    Console.WriteLine("Connecting...");
+                    connection.Open();
+                    Console.WriteLine("Connected");
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                GenreCountCustomer tempCustomer = new GenreCountCustomer();
+                                tempCustomer.GenreName = reader.GetString(0);
+                                tempCustomer.GenreCount = reader.GetInt32(1);
+                                tempList.Add(tempCustomer);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Sql Error: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Genreric Error: " + ex.Message);
+            }
+            return tempList;
         }
 
         public Customer Search(string searchString)

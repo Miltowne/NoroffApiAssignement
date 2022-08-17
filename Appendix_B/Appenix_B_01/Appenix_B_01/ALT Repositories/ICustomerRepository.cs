@@ -13,7 +13,12 @@ namespace Appenix_B_01.ALT_Repositories
 
         public IEnumerable<Customer> GetAllWhitLimit(int offset, int limit);
 
+        public IEnumerable<NumberOfCountriesCustomer> GetNumberOfCountries();
 
-               
+        public IEnumerable<Customer> HighestSpenders();
+
+        public IEnumerable<GenreCountCustomer> MostPopularGenre(int id);
+
+
     }
 }

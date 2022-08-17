@@ -33,7 +33,7 @@ namespace Appenix_B_01.Repositories
                             while (reader.Read())
                             {
                                 // Handle Result
-                                Customer temp = new Customer();
+                                Customer temp = new Customer(reader.GetString(1), reader.GetString(2), );
                                 temp.CustomerId = reader.GetInt32(0);
                                 temp.FirstName = reader.GetString(1);
                                 temp.LastName = reader.GetString(2);

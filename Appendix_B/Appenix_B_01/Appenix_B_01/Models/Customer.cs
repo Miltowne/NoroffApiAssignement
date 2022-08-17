@@ -9,6 +9,13 @@ namespace Appenix_B_01.Models
     public class Customer
     {
 
+        public Customer(string _firstName, string _lastName, string _email)
+        {
+            FirstName = _firstName;
+            LastName = _lastName; 
+            Email = _email;
+        }
+
         public int CustomerId { get; set; } 
         public string FirstName { get; set; } 
         public string LastName { get; set; } 
@@ -21,7 +28,8 @@ namespace Appenix_B_01.Models
         public string? Phone { get; set; } 
         public string? Fax { get; set; } 
         public string Email { get; set; } 
-        public int SupportRepId { get; set; }  
+        public int SupportRepId { get; set; }
 
+        public Invoice Invoice { get; set; } = new Invoice();
     }
 }
