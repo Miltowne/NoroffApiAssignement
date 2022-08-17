@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Appenix_B_01.Models
 {
-    public class NumberOfCountriesCustomer
+    /// <summary>
+    /// model of customer in countries
+    /// </summary>
+    public class CustomerCountry
     {
         public string Country { get; set; }
 

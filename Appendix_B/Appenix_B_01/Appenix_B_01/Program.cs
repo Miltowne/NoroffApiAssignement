@@ -6,18 +6,26 @@ using ICustomerRepository = Appenix_B_01.ALT_Repositories.ICustomerRepository;
 
 class Program
 {
+    /// <summary>
+    /// Creates a Customer Repository and test runs it trough some tests
+    /// Press "run" to view the results
+    /// </summary>
+    /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
-        // POCO
-
         ICustomerRepository repository = new CustomerRepositoryImpl();
-        // CRUD
+
         TestCustomerCountries(repository);
 
-        TestCustomerOrderedTotal(repository);
+        TestHighestSpenders(repository);
 
-        TestGenreCount(repository);
+        TestCustomerGenre(repository);
+
+        TestUpdate(repository);
+
+        TestGetAllWithLimit(repository);
+
+        TestSearchByString(repository);
     }
     /// <summary>
     /// Prints the number of customers in each country (hight to low) USA at 13.
@@ -25,45 +33,34 @@ class Program
     /// <param name="repository"></param>
     static void TestCustomerCountries(ICustomerRepository repository)
     {
-        PrintNumOfCountryCustomers(repository.GetNumberOfCountries());
-    }
-    /// <summary>
-    /// Prints number of customers in each country.
-    /// </summary>
-    /// <param name="customerCountries"></param>
-    static void PrintNumOfCountryCustomers(IEnumerable<NumberOfCountriesCustomer> customerCountries)
-    {
-        foreach (var customerCountry in customerCountries)
-        {
-            Console.WriteLine($"Number Of Customer: {customerCountry.NumberOfCountries} In: {customerCountry.Country}");
-
-        }
+        PrintCustomerCountry(repository.GetNumberOfCountries());
     }
     /// <summary>
     /// For given customer, their most popular gener that corresponds to the most tracks from invoice associated to that customer.
     /// </summary>
     /// <param name="repository"></param>
-    static void TestGenreCount(ICustomerRepository repository)
+    static void TestCustomerGenre(ICustomerRepository repository)
     {
         
         var customer = repository.GetById(56);
         PrintGenreCountCustomer(repository.MostPopularGenre(56), customer);
     }
     /// <summary>
-    /// Prints customer from database geting subset of customers data.
+    /// Prints customer from database geting subset of customers data
+    /// based on the offset and limit values
     /// </summary>
     /// <param name="repository"></param>
-    static void TestGetAllWhitLimit(ICustomerRepository repository)
+    static void TestGetAllWithLimit(ICustomerRepository repository)
     {
-        PrintCustomers(repository.GetAllWhitLimit(40, 20));
+        PrintCustomers(repository.GetAllWithLimit(40, 20));
     }
     /// <summary>
-    /// Prints the specific search of customer in the database.
+    /// Prints the specific search of customers firstname in the database.
     /// </summary>
     /// <param name="repository"></param>
     static void TestSearchByString(ICustomerRepository repository)
     {
-        PrintCustomer(repository.Search("barbaro"));
+        PrintCustomer(repository.Search("a"));
     }
     /// <summary>
     ///  Prints all the customers in the database.
@@ -85,12 +82,12 @@ class Program
     /// Sorting customers on higest spenders.
     /// </summary>
     /// <param name="repository"></param>
-    static void TestCustomerOrderedTotal(ICustomerRepository repository)
+    static void TestHighestSpenders(ICustomerRepository repository)
     {
-        PrintCustomers(repository.HighestSpenders());
+        PrintHighestSpenders(repository.HighestSpenders());
     }
     /// <summary>
-    /// Inserts a new customer.
+    /// Inserts a new customer. Gets added last in database
     /// </summary>
     /// <param name="repository"></param>
     static void TestInsert(ICustomerRepository repository)
@@ -117,14 +114,17 @@ class Program
         }
     }
     /// <summary>
-    /// Updates the created customer.
+    /// Updates an customer of given id
     /// </summary>
     /// <param name="repository"></param>
     static void TestUpdate(ICustomerRepository repository)
     {
-        var testAdd = new Customer("Pelle", "Jansson", "Pelle@hotmail.com")
+        var testAdd = new Customer()
         {
             CustomerId = 1,
+            FirstName = "Pelle",
+            LastName = "Karlsson",
+            Email = "Pelle@gmail.com",
             Company = "swederkgn",
             Address = "LarssonStreet",
             City = "Norrköping",
@@ -145,6 +145,18 @@ class Program
         }
     }
     /// <summary>
+    /// Prints number of customers in each country.
+    /// </summary>
+    /// <param name="customerCountries"></param>
+    static void PrintCustomerCountry(IEnumerable<CustomerCountry> customerCountries)
+    {
+        foreach (var customerCountry in customerCountries)
+        {
+            Console.WriteLine($"Number Of Customer: {customerCountry.NumberOfCountries} In: {customerCountry.Country}");
+
+        }
+    }
+    /// <summary>
     /// Prints out all the customers.
     /// </summary>
     /// <param name="customers"></param>
@@ -161,25 +173,39 @@ class Program
     /// <param name="customer"></param>
     static void PrintCustomer(Customer customer)
     {
-        if(customer.Invoice.Total > 0)
-        {
-            Console.WriteLine($"---Id: {customer.CustomerId} LastName: {customer.LastName} FirstName: {customer.FirstName} Country: {customer.Country} Phone number: {customer.Phone} email: {customer.Email} total: {customer.Invoice.Total} ---");
-
-        }
-        else Console.WriteLine($"---Id: {customer.CustomerId} LastName: {customer.LastName} FirstName: {customer.FirstName} Country: {customer.Country} Phone number: {customer.Phone} email: {customer.Email} ---");
+        Console.WriteLine($"---Id: {customer.CustomerId} LastName: {customer.LastName} FirstName: {customer.FirstName} Country: {customer.Country} Phone number: {customer.Phone} email: {customer.Email} ---");
     }
     /// <summary>
     /// Prints ganre count and customer.
     /// </summary>
     /// <param name="genreCount"></param>
     /// <param name="customer"></param>
-    static void PrintGenreCountCustomer(IEnumerable<GenreCountCustomer> genreCount, Customer customer)
+    static void PrintGenreCountCustomer(IEnumerable<CustomerGenre> genreCount, Customer customer)
     {
         Console.WriteLine($"Customer: {customer.FirstName} {customer.LastName} \n Have: ");
         foreach (var _genreCount in genreCount)
         {
             Console.WriteLine($"Count: {_genreCount.GenreCount} Of genre: {_genreCount.GenreName} \n");
         }
+    }
+    /// <summary>
+    /// Prints highest spenders
+    /// </summary>
+    /// <param name="cusSpenders"></param>
+    static void PrintHighestSpenders(IEnumerable<CustomerSpender> cusSpenders)
+    {
+        foreach (var cusSpender in cusSpenders)
+        {
+            PrintHighestSpender(cusSpender);
+        }
+    }
+    /// <summary>
+    /// Prints a highest spender
+    /// </summary>
+    /// <param name="cusSpender"></param>
+    static void PrintHighestSpender(CustomerSpender cusSpender)
+    {
+        Console.WriteLine($"FirstName: {cusSpender.FirstName} LastName: {cusSpender.LastName} Total: {cusSpender.Total}");
     }
 }
 

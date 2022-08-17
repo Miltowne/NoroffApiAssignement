@@ -11,21 +11,22 @@ using System.Threading.Tasks;
 namespace Appenix_B_01.ALT_Repositories
 {
     /// <summary>
-    ///  Interface of ICustomerRepository.
+    ///  implements Interface of ICustomerRepository.
     /// </summary>
     public class CustomerRepositoryImpl : ICustomerRepository
     {
         /// <summary>
-        /// Add method to INSERT IN TO customer.
+        /// Add method to INSERT INTO customer.
         /// </summary>
         /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <returns>true if success</returns>
         public bool Add(Customer entity)
         {
             bool success = false;
             string sql = "INSERT INTO Customer(FirstName, LastName, Address, Email) VALUES(@FirstName, @LastName, @Address, @Email)";
             try
             {
+                // connect
                 using (SqlConnection conn = new SqlConnection(ConnectionStringHelper.GetConnectionString()))
                 {
                     Console.WriteLine("Connecting...");
@@ -34,9 +35,7 @@ namespace Appenix_B_01.ALT_Repositories
                     // Make A Command
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
-                        // Reader
                         // Handle Result
-                        //cmd.Parameters.AddWithValue("@CustomerId", entity.CustomerId);
                         cmd.Parameters.AddWithValue("@FirstName", entity.FirstName);
                         cmd.Parameters.AddWithValue("@LastName", entity.LastName);
                         cmd.Parameters.AddWithValue("@Address", entity.Address);
@@ -69,7 +68,7 @@ namespace Appenix_B_01.ALT_Repositories
         /// Method that updates the customer.
         /// </summary>
         /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <returns>true if success</returns>
         public bool Edit(Customer entity)
         {
             bool success = false;
@@ -110,7 +109,7 @@ namespace Appenix_B_01.ALT_Repositories
         /// <summary>
         /// Method that gets all the customers.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List containing all the customers</returns>
         public IEnumerable<Customer> GetAll()
         {
             List<Customer> tempList = new List<Customer>();
@@ -155,12 +154,12 @@ namespace Appenix_B_01.ALT_Repositories
         }
 
         /// <summary>
-        /// Method that gets the subset of customers data.
+        /// Method that gets the subset of customers data.based on offset and limit parameters
         /// </summary>
         /// <param name="offset"></param>
         /// <param name="limit"></param>
-        /// <returns></returns>
-        public IEnumerable<Customer> GetAllWhitLimit(int offset, int limit)
+        /// <returns>List with customers</returns>
+        public IEnumerable<Customer> GetAllWithLimit(int offset, int limit)
         {
             List<Customer> tempList = new List<Customer>();
             string sql = $" SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer ORDER BY CustomerId OFFSET {offset}  ROWS FETCH NEXT {limit}  ROWS ONLY";
@@ -207,7 +206,7 @@ namespace Appenix_B_01.ALT_Repositories
         /// Method that gets the customers by (id).
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>one Customer</returns>
         public Customer GetById(int id)
         {
             Customer temp = new Customer();
@@ -254,10 +253,10 @@ namespace Appenix_B_01.ALT_Repositories
         /// <summary>
         /// Method that gets the number of customers in each country (hight to low) USA at 13.
         /// </summary>
-        /// <returns></returns>
-        public IEnumerable<NumberOfCountriesCustomer> GetNumberOfCountries()
+        /// <returns>List containing customers</returns>
+        public IEnumerable<CustomerCountry> GetNumberOfCountries()
         {
-            List<NumberOfCountriesCustomer> tempList = new List<NumberOfCountriesCustomer>();
+            List<CustomerCountry> tempList = new List<CustomerCountry>();
             string sql = $"SELECT Country, COUNT(*) NumberOfCountries FROM Customer GROUP BY Country ORDER BY NumberOfCountries DESC";
             try
             {
@@ -272,7 +271,7 @@ namespace Appenix_B_01.ALT_Repositories
                         {
                             while (reader.Read())
                             {
-                                NumberOfCountriesCustomer temp = new NumberOfCountriesCustomer();
+                                CustomerCountry temp = new CustomerCountry();
                                 // If value is null, set it to string (easier for foreachloop later on if value is not null)
                                 temp.Country = reader.IsDBNull(0) ? "No Country" : reader.GetString(0);
                                 temp.NumberOfCountries = reader.IsDBNull(1) ? 0 : reader.GetInt32(1);
@@ -296,10 +295,10 @@ namespace Appenix_B_01.ALT_Repositories
         /// <summary>
         /// Method that sort customer on highest spenders.
         /// </summary>
-        /// <returns></returns>
-        public IEnumerable<Customer> HighestSpenders()
+        /// <returns>List of highest customer spenders</returns>
+        public IEnumerable<CustomerSpender> HighestSpenders()
         {
-            List<Customer> tempList = new List<Customer>();
+            List<CustomerSpender> tempList = new List<CustomerSpender>();
             string sql = $"SELECT Customer.FirstName, Customer.LastName, Invoice.Total FROM Customer INNER JOIN Invoice ON Customer.CustomerId = Invoice.CustomerId ORDER BY Invoice.Total DESC";
             try
             {
@@ -314,13 +313,13 @@ namespace Appenix_B_01.ALT_Repositories
                         {
                             while (reader.Read())
                             {
-                                Customer temp = new Customer();
+                                CustomerSpender temp = new CustomerSpender();
                                 // If value is null, set it to string (easier for foreachloop later on if value is not null)
                                 //temp.CustomerId = reader.GetInt32(0);
                                 temp.FirstName = reader.GetString(0);
                                 temp.LastName = reader.GetString(1);
                                 //SqlDecimal s = new SqlDecimal(reader.GetDecimal(2));
-                                temp.Invoice.Total = reader.GetDecimal(2);
+                                temp.Total = reader.GetDecimal(2);
                                 tempList.Add(temp);
                             }
                         }
@@ -339,13 +338,13 @@ namespace Appenix_B_01.ALT_Repositories
             return tempList;
         }
         /// <summary>
-        /// Method that sort the most popular gener.
+        /// Method that sort the most popular genre of given Customer (id)
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
-        public IEnumerable<GenreCountCustomer> MostPopularGenre(int id)
+        /// <returns>Returns 1 or 2 top genres depending on if the top value is the same twice</returns>
+        public IEnumerable<CustomerGenre> MostPopularGenre(int id)
         {
-            List<GenreCountCustomer> tempList = new List<GenreCountCustomer>();
+            List<CustomerGenre> tempList = new List<CustomerGenre>();
 
             string sql = "with GenreCountTable as (" +
                 "SELECT Genre.Name, COUNT(Genre.GenreId) AS genreCount " +
@@ -376,7 +375,7 @@ namespace Appenix_B_01.ALT_Repositories
                         {
                             while (reader.Read())
                             {
-                                GenreCountCustomer tempCustomer = new GenreCountCustomer();
+                                CustomerGenre tempCustomer = new CustomerGenre();
                                 tempCustomer.GenreName = reader.GetString(0);
                                 tempCustomer.GenreCount = reader.GetInt32(1);
                                 tempList.Add(tempCustomer);
@@ -396,14 +395,14 @@ namespace Appenix_B_01.ALT_Repositories
             return tempList;
         }
         /// <summary>
-        /// Method for serching on specific customer.
+        /// Method for serching on specific customer, by firstname
         /// </summary>
         /// <param name="searchString"></param>
-        /// <returns></returns>
+        /// <returns>Customer by the searchresult</returns>
         public Customer Search(string searchString)
         {
             Customer temp = new Customer();
-            string sql = $"Select CustomerId, FirstName, LastName, Country, Address, PostalCode, Phone, Email from Customer where Address like  '{searchString}%';";
+            string sql = $"Select CustomerId, FirstName, LastName, Country, Address, PostalCode, Phone, Email from Customer where FirstName like  '{searchString}%';";
             try
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString()))

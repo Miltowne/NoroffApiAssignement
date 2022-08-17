@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 namespace Appenix_B_01.Models
 {
     /// <summary>
-    /// test
+    /// Model of customer with properties
     /// </summary>
     public class Customer
     {
+        public Customer()
+        {
 
+        }
         public Customer(string _firstName, string _lastName, string _email)
         {
             FirstName = _firstName;
@@ -33,6 +36,5 @@ namespace Appenix_B_01.Models
         public string Email { get; set; } 
         public int SupportRepId { get; set; }
 
-        public Invoice Invoice { get; set; } = new Invoice();
     }
 }

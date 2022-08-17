@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Appenix_B_01.Models
 {
-    public class GenreCountCustomer
+    /// <summary>
+    /// model of customers highest played genre
+    /// </summary>
+    public class CustomerGenre
     {
         public string GenreName { get; set; }
         public int GenreCount { get; set; }

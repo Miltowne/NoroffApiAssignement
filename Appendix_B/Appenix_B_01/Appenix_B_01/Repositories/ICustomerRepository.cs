@@ -5,14 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appenix_B_01.Repositories
+namespace Appenix_B_01.ALT_Repositories
 {
-    public interface ICustomerRepository
+    /// <summary>
+    /// Extends interface of IRepository.
+    /// Adds a few more specific methods to hande data
+    /// </summary>
+    public interface ICustomerRepository : IRepository<Customer>
     {
-        public Customer GetCustomer(int id);
-        public List<Customer> GetAllCustomers();
-        public bool AddNewCustomer(Customer customer);
-        public bool UpdateCustomer(Customer customer);
-        public bool DeleteCustomer(string id);
+        public Customer Search(string searchString);
+
+        public IEnumerable<Customer> GetAllWithLimit(int offset, int limit);
+
+        public IEnumerable<CustomerCountry> GetNumberOfCountries();
+
+        public IEnumerable<CustomerSpender> HighestSpenders();
+
+        public IEnumerable<CustomerGenre> MostPopularGenre(int id);
+
+
     }
 }
