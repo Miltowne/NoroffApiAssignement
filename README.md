@@ -29,8 +29,3 @@ Microsoft SQL Server Management Studio
 # Authors
 Sanjin Ajanic 
 Tim Jonasson
-
-
-
-
-
