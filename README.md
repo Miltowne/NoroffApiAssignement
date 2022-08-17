@@ -5,7 +5,7 @@ Assignment6
 This is a school-assignment where we work whit Chinook database. We create SQL querrys and SQL injection on a console application, and setting up a simple Database whit SuperHeroDb.
 
 # Usage
-in the model folder there are sql querrys where we check specific ![image.png](./image.png)
+in the model folder there are sql querrys where we check specific ![ALT]![image.png](./image.png)
 
 # Dependencies
 System.Data.SqlClient:
