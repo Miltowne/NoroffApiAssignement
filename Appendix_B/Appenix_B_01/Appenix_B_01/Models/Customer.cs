@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Appenix_B_01.Models
 {
+    /// <summary>
+    /// test
+    /// </summary>
     public class Customer
     {
 
