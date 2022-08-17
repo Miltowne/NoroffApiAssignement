@@ -10,8 +10,16 @@ using System.Threading.Tasks;
 
 namespace Appenix_B_01.ALT_Repositories
 {
+    /// <summary>
+    ///  Interface of ICustomerRepository.
+    /// </summary>
     public class CustomerRepositoryImpl : ICustomerRepository
     {
+        /// <summary>
+        /// Add method to INSERT IN TO customer.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public bool Add(Customer entity)
         {
             bool success = false;
@@ -47,12 +55,21 @@ namespace Appenix_B_01.ALT_Repositories
             }
             return success;
         }
-
+        /// <summary>
+        /// Delete method that is not in use.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public bool Delete(Customer entity)
         {
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// Method that updates the customer.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public bool Edit(Customer entity)
         {
             bool success = false;
@@ -90,7 +107,10 @@ namespace Appenix_B_01.ALT_Repositories
             }
             return success;
         }
-
+        /// <summary>
+        /// Method that gets all the customers.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Customer> GetAll()
         {
             List<Customer> tempList = new List<Customer>();
@@ -134,7 +154,12 @@ namespace Appenix_B_01.ALT_Repositories
             return tempList;
         }
 
-
+        /// <summary>
+        /// Method that gets the subset of customers data.
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="limit"></param>
+        /// <returns></returns>
         public IEnumerable<Customer> GetAllWhitLimit(int offset, int limit)
         {
             List<Customer> tempList = new List<Customer>();
@@ -178,6 +203,11 @@ namespace Appenix_B_01.ALT_Repositories
             }
             return tempList;
         }
+        /// <summary>
+        /// Method that gets the customers by (id).
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Customer GetById(int id)
         {
             Customer temp = new Customer();
@@ -221,7 +251,10 @@ namespace Appenix_B_01.ALT_Repositories
             }
             return temp;
         }
-
+        /// <summary>
+        /// Method that gets the number of customers in each country (hight to low) USA at 13.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<NumberOfCountriesCustomer> GetNumberOfCountries()
         {
             List<NumberOfCountriesCustomer> tempList = new List<NumberOfCountriesCustomer>();
@@ -260,7 +293,10 @@ namespace Appenix_B_01.ALT_Repositories
             }
             return tempList;
         }
-
+        /// <summary>
+        /// Method that sort customer on highest spenders.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Customer> HighestSpenders()
         {
             List<Customer> tempList = new List<Customer>();
@@ -302,7 +338,11 @@ namespace Appenix_B_01.ALT_Repositories
             }
             return tempList;
         }
-
+        /// <summary>
+        /// Method that sort the most popular gener.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IEnumerable<GenreCountCustomer> MostPopularGenre(int id)
         {
             List<GenreCountCustomer> tempList = new List<GenreCountCustomer>();
@@ -355,7 +395,11 @@ namespace Appenix_B_01.ALT_Repositories
             }
             return tempList;
         }
-
+        /// <summary>
+        /// Method for serching on specific customer.
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <returns></returns>
         public Customer Search(string searchString)
         {
             Customer temp = new Customer();

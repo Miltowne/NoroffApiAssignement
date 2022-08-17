@@ -9,6 +9,10 @@ namespace Appenix_B_01.Repositories
 {
     public class ConnectionStringHelper
     {
+        /// <summary>
+        /// Gets the connectionString to the database.
+        /// </summary>
+        /// <returns></returns>
         public static string GetConnectionString()
         {
             SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder();

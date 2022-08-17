@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Appenix_B_01.ALT_Repositories
 {
+    /// <summary>
+    /// Generic CRUD interface.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface IRepository<T>
     {
         T GetById(int id);

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Appenix_B_01.ALT_Repositories
 {
+    /// <summary>
+    /// Extense interface of IRepository.
+    /// </summary>
     public interface ICustomerRepository : IRepository<Customer>
     {
         public Customer Search(string searchString);
