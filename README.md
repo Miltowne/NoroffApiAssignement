@@ -10,6 +10,22 @@ Apendix_B :
 In the model folder we have created sql querrys where we read customers(by id) add, update and delete customors in the Chinook database.
 In the C# applications are we implementing a database first and working whit CRUD operations and creating interfaces, in Program.cs you can test methods were we interact whit the Database.
 
+In program.cs -> Main
+You can add one of these thest methods and press F5 to se the test
+```
+TestCustomerCountries(repository);
+
+TestHighestSpenders(repository);
+
+TestCustomerGenre(repository);
+
+TestUpdate(repository);
+
+TestGetAllWithLimit(repository);
+
+TestSearchByString(repository);
+```
+
 # Dependencies
 System.Data.SqlClient:
 Provides the data provider for SQL Server. These classes provide access to versions of SQL Server and encapsulate database-specific protocols, including tabular data stream (TDS
