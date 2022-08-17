@@ -15,17 +15,9 @@ class Program
     {
         ICustomerRepository repository = new CustomerRepositoryImpl();
 
-        TestCustomerCountries(repository);
-
-        TestHighestSpenders(repository);
-
-        TestCustomerGenre(repository);
-
-        TestUpdate(repository);
-
-        TestGetAllWithLimit(repository);
-
-        TestSearchByString(repository);
+        // TODO
+        // Insert test methods you want to test
+        
     }
     /// <summary>
     /// Prints the number of customers in each country (hight to low) USA at 13.
