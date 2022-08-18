@@ -1,5 +1,5 @@
 # Project Title
-Assignment6 
+Assignment 5
 
 # Descripton 
 This is a school-assignment where we work whit Chinook database. We create SQL querrys and SQL injection on a console application, and setting up a simple Database whit SuperHeroDb.
